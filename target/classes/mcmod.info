@@ -1,0 +1,11 @@
+[
+    {
+        "modid": "pipeline",
+        "name": "Pipeline",
+        "version": "0.1-alpha",
+        "url": "http://mcapi.de",
+        "authorList": [
+            "Yonas"
+        ]
+    }
+]

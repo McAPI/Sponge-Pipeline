@@ -1,0 +1,12 @@
+# The IP to listen to.
+host: %ip%
+
+# Port to listen to, to answer requests.
+port: 20000
+
+# If this value is 'false' the plugin doesn't print useful debugging messsage.
+# If something is not working or you need more detailed longs set this value to 'true'.
+debug: false
+
+# You can use this signature to verify requests.
+signature: %default_signature%
