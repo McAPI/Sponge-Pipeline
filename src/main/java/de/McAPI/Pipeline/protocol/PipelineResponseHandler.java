@@ -3,6 +3,7 @@ package de.McAPI.Pipeline.protocol;
 import com.google.gson.JsonObject;
 import de.McAPI.Pipeline.Pipeline;
 import de.McAPI.Pipeline.Session;
+import de.McAPI.Pipeline.exception.PipelineException;
 import de.McAPI.Pipeline.protocol.response.PipelineResponse;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -82,17 +83,22 @@ public class PipelineResponseHandler extends SimpleChannelInboundHandler<Pipelin
     @Override
     public void exceptionCaught(ChannelHandlerContext context, Throwable cause) throws Exception {
 
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("status", "Error");
-        jsonObject.addProperty("message", cause.getMessage().substring(cause.getMessage().indexOf(": ") + 2));
+        if(cause instanceof PipelineException) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("status", "Error");
+            jsonObject.addProperty("message", cause.getMessage().substring(cause.getMessage().indexOf(": ") + 2));
 
-        context.pipeline().writeAndFlush(
-                Unpooled.copiedBuffer(
-                        jsonObject.toString() + "\0",
-                        StandardCharsets.UTF_8
-                )
-        );
+            context.pipeline().writeAndFlush(
+                    Unpooled.copiedBuffer(
+                            jsonObject.toString() + "\0",
+                            StandardCharsets.UTF_8
+                    )
+            );
+        }
 
+        if(context.channel().attr(Pipeline.PLUGIN_ATTRIBUTE_KEY).get().isDebug()) {
+            cause.printStackTrace();
+        }
     }
 
 }

@@ -70,7 +70,15 @@ public class PipelineResponse {
             entry.addProperty("health", player.getHealthData().getValue(Keys.HEALTH).get().get());
             entry.addProperty("food", player.getFoodData().foodLevel().get());
 
+            // Status
+            JsonObject status = new JsonObject();
+            status.addProperty("isFlying", player.get(Keys.IS_FLYING).get());
+            status.addProperty("isSneaking", player.get(Keys.IS_SNEAKING).get());
+            status.addProperty("isSprinting", player.get(Keys.IS_SPRINTING).get());
+            entry.add("status", status);
+
             players.add(entry);
+
 
         }
         if(this.pipeline.isDebug()) {
@@ -98,12 +106,13 @@ public class PipelineResponse {
             entry.addProperty("dimension", world.getDimension().getName());
             entry.addProperty("generatorType", world.getDimension().getGeneratorType().getName());
 
+
             // Game Rules
             JsonArray gameRules = new JsonArray();
             for(Map.Entry<String, String> rule : world.getProperties().getGameRules().entrySet()) {
 
                 JsonObject ruleEntry = new JsonObject();
-                ruleEntry.addProperty(rule.getKey(), rule.getValue());
+                ruleEntry.addProperty(rule.getKey(), Boolean.valueOf(rule.getValue()));
 
                 gameRules.add(ruleEntry);
             }
@@ -167,6 +176,25 @@ public class PipelineResponse {
         platform.addProperty("api", gamePlatform.getApi().getVersion().orElse(null));
         platform.addProperty("implementation", gamePlatform.getImplementation().getVersion().orElse(null));
         platform.addProperty("minecraft", gamePlatform.getMinecraftVersion().getName());
+        platform.addProperty("online-mode", Sponge.getGame().getServer().getOnlineMode());
+
+        // performance
+        JsonObject performance = new JsonObject();
+        performance.addProperty("tps", Sponge.getGame().getServer().getTicksPerSecond());
+
+        JsonObject cpu = new JsonObject();
+        cpu.addProperty("cores", Runtime.getRuntime().availableProcessors());
+
+        JsonObject memory = new JsonObject();
+        memory.addProperty("max", Runtime.getRuntime().maxMemory());
+        memory.addProperty("total", Runtime.getRuntime().totalMemory());
+        memory.addProperty("free", Runtime.getRuntime().freeMemory());
+        memory.addProperty("used", (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
+
+        performance.add("cpu", cpu);
+        performance.add("memory", memory);
+
+        platform.add("performance", performance);
 
         if(this.pipeline.isDebug()) {
             this.pipeline.logger().info(String.format(
@@ -174,6 +202,9 @@ public class PipelineResponse {
                     this.session.getDebugKey()
             ));
         }
+
+        // Debug Information
+        this.response.addProperty("debug", this.session.getDebugKey());
 
         //add
         this.response.add("platform", platform);

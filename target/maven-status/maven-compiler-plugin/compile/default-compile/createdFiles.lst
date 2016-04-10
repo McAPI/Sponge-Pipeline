@@ -1,0 +1,11 @@
+de\McAPI\Pipeline\protocol\PipelineResponseHandler.class
+de\McAPI\Pipeline\exception\PipelineException.class
+de\McAPI\Pipeline\Pipeline.class
+de\McAPI\Pipeline\protocol\response\PipelineResponse.class
+de\McAPI\Pipeline\protocol\PipelineRequestDecoder.class
+de\McAPI\Pipeline\Pipeline$2.class
+de\McAPI\Pipeline\Token.class
+de\McAPI\Pipeline\Session.class
+mcmod.info
+de\McAPI\Pipeline\protocol\PipelineHandshakeHandler.class
+de\McAPI\Pipeline\Pipeline$1.class

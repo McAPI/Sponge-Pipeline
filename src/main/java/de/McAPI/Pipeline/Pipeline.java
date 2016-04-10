@@ -23,6 +23,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -49,6 +50,7 @@ public class Pipeline {
     private boolean debug = true;
 
     private NioEventLoopGroup group = new NioEventLoopGroup(1);
+    private io.netty.channel.Channel channel;
 
     private Key signature;
     private String version;
@@ -113,59 +115,72 @@ public class Pipeline {
         int port  = node.getNode("port").getInt(20000);
 
         new ServerBootstrap()
-                .channel(NioServerSocketChannel.class)
-                .group(this.group)
-                .childHandler(new ChannelInitializer<NioSocketChannel>() {
+            .channel(NioServerSocketChannel.class)
+            .group(this.group)
+            .childHandler(new ChannelInitializer<NioSocketChannel>() {
 
-                    @Override
-                    protected void initChannel(NioSocketChannel channel) throws Exception {
+                @Override
+                protected void initChannel(NioSocketChannel channel) throws Exception {
 
-                        Session session = new Session();
+                    Session session = new Session();
 
-                        if (isDebug()) {
-                            logger.info(String.format(
-                                    "[%s] Creating a new request.",
-                                    session.getDebugKey()
-                            ));
-                        }
-
-
-                        channel.attr(Session.SESSION_ATTRIBUTE_KEY).set(session);
-                        channel.attr(Pipeline.PLUGIN_ATTRIBUTE_KEY).set(Pipeline.this);
-
-                        if (isDebug()) {
-                            logger.info(String.format(
-                                    "[%s] Establishing connection with %s.",
-                                    session.getDebugKey(),
-                                    channel.remoteAddress().toString()
-                            ));
-                        }
-
-                        channel.pipeline().addLast("handshakeHandler", new PipelineHandshakeHandler());
-                        channel.pipeline().addAfter("handshakeHandler", "stringDecoder", new StringDecoder(StandardCharsets.UTF_8));
-                        channel.pipeline().addAfter("stringDecoder", "requestDecoder", new PipelineRequestDecoder());
-                        channel.pipeline().addAfter("requestDecoder", "response", new PipelineResponseHandler());
+                    if (isDebug()) {
+                        logger.info(String.format(
+                                "[%s] Creating a new request.",
+                                session.getDebugKey()
+                        ));
                     }
 
-                })
-                .bind(host, port)
-                .addListener(new ChannelFutureListener() {
 
-                    public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                    channel.attr(Session.SESSION_ATTRIBUTE_KEY).set(session);
+                    channel.attr(Pipeline.PLUGIN_ATTRIBUTE_KEY).set(Pipeline.this);
 
-                        if (channelFuture.isSuccess()) {
-                            logger.info("Pipeline is now open.");
-                        } else {
-                            logger.info("Pipeline wasn't able to let the oil threw...");
-
-                            if (isDebug() && !(channelFuture.cause() == null)) {
-                                logger.info(channelFuture.cause().getMessage());
-                            }
-                        }
-
+                    if (isDebug()) {
+                        logger.info(String.format(
+                                "[%s] Establishing connection with %s.",
+                                session.getDebugKey(),
+                                channel.remoteAddress().toString()
+                        ));
                     }
 
-                });
+                    channel.pipeline().addLast("handshakeHandler", new PipelineHandshakeHandler());
+                    channel.pipeline().addAfter("handshakeHandler", "stringDecoder", new StringDecoder(StandardCharsets.UTF_8));
+                    channel.pipeline().addAfter("stringDecoder", "requestDecoder", new PipelineRequestDecoder());
+                    channel.pipeline().addAfter("requestDecoder", "response", new PipelineResponseHandler());
+                }
+
+            })
+            .bind(host, port)
+            .addListener(new ChannelFutureListener() {
+
+                public void operationComplete(ChannelFuture channelFuture) throws Exception {
+
+                    if (channelFuture.isSuccess()) {
+                        channel = channelFuture.channel();
+                        logger.info("Pipeline is now open.");
+                    } else {
+                        logger.info("Pipeline wasn't able to let the oil threw...");
+
+                        if (isDebug() && !(channelFuture.cause() == null)) {
+                            logger.info(channelFuture.cause().getMessage());
+                        }
+                    }
+
+                }
+
+            });
+
+    }
+
+    @Listener
+    public void onStop(GameStoppingServerEvent event) {
+
+        if(!(this.channel == null)) {
+            this.channel.close();
+        }
+
+        this.group.shutdownGracefully();
+        this.logger.info("Closed the Pipeline.");
 
     }
 
