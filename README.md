@@ -13,13 +13,16 @@ PIPELINE {version} {key}
 ##### Your Response
 You have to resspond to the server with a message. The message should be a JSON-String containg the following data:
 ```json
-{"signature":"{signature}","payload":"{\"key\":\"{key}\"}"}
+{"signature":"signature","payload":"{\"key\":\"key\"}"}
 ```
 
 - `{signature}` is a HMAC-SHA256
  digest of the payload with the signature provided by the owner.  
 - `payload` contains a JSON-encoded string with a key attribute that contains the session key.
+ 
 ##### Pipeline Response
 The Pipeline will respond with two packets.
+
 1. This package contains a JSON-String with only one attribute called "length". - This gives you the total length of the upcoming package. The length is in bytes. `{"length":2213}`
+ 
 2. This package contains the real requested data. 
