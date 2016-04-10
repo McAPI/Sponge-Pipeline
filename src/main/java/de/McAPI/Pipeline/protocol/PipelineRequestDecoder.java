@@ -43,8 +43,8 @@ public class PipelineRequestDecoder extends MessageToMessageDecoder<String> {
             ));
         }
 
-        JsonObject request = gson.fromJson(input, JsonObject.class);
-        JsonObject payload = gson.fromJson(request.get("payload").getAsString(), JsonObject.class);
+        JsonObject request = this.gson.fromJson(input, JsonObject.class);
+        JsonObject payload = this.gson.fromJson(request.get("payload").getAsString(), JsonObject.class);
 
         // Validate the provided key
         String providedKey = null;
