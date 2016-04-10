@@ -22,5 +22,7 @@ You have to resspond to the server with a message. The message should be a JSON-
  
 ##### Pipeline Response
 The Pipeline will respond with two packets.
+
 1. This package contains a JSON-String with only one attribute called "length". - This gives you the total length of the upcoming package. The length is in bytes. `{"length":2213}`
+ 
 2. This package contains the real requested data. 
