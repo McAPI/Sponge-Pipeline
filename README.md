@@ -13,7 +13,7 @@ PIPELINE {version} {key}
 ##### Your Response
 You have to resspond to the server with a message. The message should be a JSON-String containg the following data:
 ```json
-{"signature":"{signature}","payload":"{\"key\":\"{key}\"}"}
+{"signature":"signature","payload":"{\"key\":\"key\"}"}
 ```
 
 - `{signature}` is a HMAC-SHA256
