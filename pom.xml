@@ -6,7 +6,7 @@
 
     <groupId>de.McAPI</groupId>
     <artifactId>Pipeline</artifactId>
-    <version>0.2-alpha</version>
+    <version>0.3-alpha</version>
 
     <repositories>
         <repository>
@@ -30,7 +30,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                    <outputDirectory>F:\Sponge Server\mods</outputDirectory>
+                    <outputDirectory>E:\Servers\sponge\mods</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
@@ -59,7 +59,7 @@
         <dependency>
             <groupId>org.spongepowered</groupId>
             <artifactId>spongeapi</artifactId>
-            <version>4.0.1</version>
+            <version>6.0.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

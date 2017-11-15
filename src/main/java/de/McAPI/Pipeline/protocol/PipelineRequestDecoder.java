@@ -61,7 +61,7 @@ public class PipelineRequestDecoder extends MessageToMessageDecoder<String> {
         }
 
         // If the key is null or it doesnt match the session key, then we will drop the connection.
-        if(providedKey == null || !(providedKey.toString().equals(session.getKey()))) {
+        if(providedKey == null || !(providedKey.equals(session.getKey()))) {
             if(pipeline.isDebug()) {
                 pipeline.logger().info(String.format(
                         "[%s] The provided key (%s) is not valid or not equals to the session key.",
@@ -99,7 +99,6 @@ public class PipelineRequestDecoder extends MessageToMessageDecoder<String> {
         pipelineResponse.build();
         list.add(pipelineResponse);
         context.pipeline().remove(this);
-
 
     }
 

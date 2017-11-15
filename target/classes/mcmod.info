@@ -2,10 +2,16 @@
     {
         "modid": "pipeline",
         "name": "Pipeline",
-        "version": "0.1-alpha",
+        "version": "0.3-alpha",
         "url": "http://mcapi.de",
         "authorList": [
             "Yonas"
+        ],
+        "dependencies": [
+            "spongeapi@6.0.0"
+        ],
+        "requiredMods": [
+            "spongeapi@6.0.0"
         ]
     }
 ]

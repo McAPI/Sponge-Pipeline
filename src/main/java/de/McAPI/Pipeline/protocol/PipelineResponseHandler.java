@@ -5,6 +5,7 @@ import de.McAPI.Pipeline.Pipeline;
 import de.McAPI.Pipeline.Session;
 import de.McAPI.Pipeline.exception.PipelineException;
 import de.McAPI.Pipeline.protocol.response.PipelineResponse;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -38,7 +39,11 @@ public class PipelineResponseHandler extends SimpleChannelInboundHandler<Pipelin
 
 
         JsonObject jsonObject = new JsonObject();
-        int responseLength = pipelineResponse.getResponse().getBytes().length;
+        ByteBuf responseBuffer = Unpooled.copiedBuffer(
+                pipelineResponse.getResponse() + "\0",
+                StandardCharsets.UTF_8
+        );
+        int responseLength = responseBuffer.array().length;
         jsonObject.addProperty("length", responseLength);
 
         context.pipeline().writeAndFlush(
@@ -55,12 +60,7 @@ public class PipelineResponseHandler extends SimpleChannelInboundHandler<Pipelin
             ));
         }
 
-        context.pipeline().writeAndFlush(
-                Unpooled.copiedBuffer(
-                        pipelineResponse.getResponse() + "\0",
-                        StandardCharsets.UTF_8
-                )
-        ).addListener(ChannelFutureListener.CLOSE);
+        context.pipeline().writeAndFlush(responseBuffer).addListener(ChannelFutureListener.CLOSE);
 
         if(pipeline.isDebug()) {
             pipeline.logger().info(String.format(
@@ -73,8 +73,7 @@ public class PipelineResponseHandler extends SimpleChannelInboundHandler<Pipelin
         if(pipeline.isDebug()) {
             pipeline.logger().info(String.format(
                     "[%s] Finished request.",
-                    session.getDebugKey(),
-                    responseLength
+                    session.getDebugKey()
             ));
         }
 

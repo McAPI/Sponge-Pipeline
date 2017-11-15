@@ -1,8 +1,8 @@
-G:\Q1\workspace\Pipeline\src\main\java\de\McAPI\Pipeline\Session.java
-G:\Q1\workspace\Pipeline\src\main\java\de\McAPI\Pipeline\protocol\PipelineRequestDecoder.java
-G:\Q1\workspace\Pipeline\src\main\java\de\McAPI\Pipeline\protocol\PipelineResponseHandler.java
-G:\Q1\workspace\Pipeline\src\main\java\de\McAPI\Pipeline\protocol\response\PipelineResponse.java
-G:\Q1\workspace\Pipeline\src\main\java\de\McAPI\Pipeline\exception\PipelineException.java
-G:\Q1\workspace\Pipeline\src\main\java\de\McAPI\Pipeline\Pipeline.java
-G:\Q1\workspace\Pipeline\src\main\java\de\McAPI\Pipeline\Token.java
-G:\Q1\workspace\Pipeline\src\main\java\de\McAPI\Pipeline\protocol\PipelineHandshakeHandler.java
+E:\workspace\private\Sponge-Pipeline\src\main\java\de\McAPI\Pipeline\exception\PipelineException.java
+E:\workspace\private\Sponge-Pipeline\src\main\java\de\McAPI\Pipeline\protocol\PipelineRequestDecoder.java
+E:\workspace\private\Sponge-Pipeline\src\main\java\de\McAPI\Pipeline\protocol\response\PipelineResponse.java
+E:\workspace\private\Sponge-Pipeline\src\main\java\de\McAPI\Pipeline\Session.java
+E:\workspace\private\Sponge-Pipeline\src\main\java\de\McAPI\Pipeline\protocol\PipelineHandshakeHandler.java
+E:\workspace\private\Sponge-Pipeline\src\main\java\de\McAPI\Pipeline\Pipeline.java
+E:\workspace\private\Sponge-Pipeline\src\main\java\de\McAPI\Pipeline\protocol\PipelineResponseHandler.java
+E:\workspace\private\Sponge-Pipeline\src\main\java\de\McAPI\Pipeline\Token.java

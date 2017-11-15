@@ -103,7 +103,6 @@ public class PipelineResponse {
             entry.addProperty("identifier", world.getUniqueId().toString());
             entry.addProperty("name", world.getName());
             entry.addProperty("difficulty", world.getDifficulty().getName());
-            entry.addProperty("dimension", world.getDimension().getName());
             entry.addProperty("generatorType", world.getDimension().getGeneratorType().getName());
 
 

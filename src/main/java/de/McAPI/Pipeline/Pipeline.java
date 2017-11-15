@@ -35,7 +35,7 @@ import java.nio.file.Path;
 import java.security.Key;
 import java.util.Optional;
 
-@Plugin(id = "pipeline", name = "Pipeline", version = "0.1-alpha", url = "http://mcapi.de", authors = "Yonas")
+@Plugin(id = "pipeline", name = "Pipeline", version = "0.3-alpha", url = "http://mcapi.de", authors = "Yonas")
 public class Pipeline {
 
     public final static AttributeKey<Pipeline> PLUGIN_ATTRIBUTE_KEY = AttributeKey.valueOf("key_pipeline_plugin");
@@ -151,21 +151,17 @@ public class Pipeline {
 
             })
             .bind(host, port)
-            .addListener(new ChannelFutureListener() {
+            .addListener((ChannelFutureListener) channelFuture -> {
 
-                public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                if (channelFuture.isSuccess()) {
+                    channel = channelFuture.channel();
+                    logger.info("Pipeline is now open.");
+                } else {
+                    logger.info("Pipeline wasn't able to let the oil threw...");
 
-                    if (channelFuture.isSuccess()) {
-                        channel = channelFuture.channel();
-                        logger.info("Pipeline is now open.");
-                    } else {
-                        logger.info("Pipeline wasn't able to let the oil threw...");
-
-                        if (isDebug() && !(channelFuture.cause() == null)) {
-                            logger.info(channelFuture.cause().getMessage());
-                        }
+                    if (isDebug() && !(channelFuture.cause() == null)) {
+                        logger.info(channelFuture.cause().getMessage());
                     }
-
                 }
 
             });
