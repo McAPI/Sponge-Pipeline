@@ -105,7 +105,6 @@ public class PipelineResponse {
             entry.addProperty("difficulty", world.getDifficulty().getName());
             entry.addProperty("generatorType", world.getDimension().getGeneratorType().getName());
 
-
             // Game Rules
             JsonArray gameRules = new JsonArray();
             for(Map.Entry<String, String> rule : world.getProperties().getGameRules().entrySet()) {
@@ -214,8 +213,7 @@ public class PipelineResponse {
         if(this.pipeline.isDebug()) {
             this.pipeline.logger().info(String.format(
                     "[%s] Finished PipelineResponse building.",
-                    this.session.getDebugKey(),
-                    plugins.size()
+                    this.session.getDebugKey()
             ));
         }
 
